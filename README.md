@@ -1,12 +1,14 @@
-# [Your Project Title Here]
+# Analysis and Prediction of Cloud Development in Hurricane Systems
 
 ## Repository Link
 
-[https://github.com/your_username/your_project_name]
+[https://github.com/thorsten789/hurricane_cloud_prediction]
 
 ## Description
 
-[Short project description here. Briefly summarize the problem you are trying to solve and the approach you're taking.]
+The dataset is based on simulations of Hurricane Paulette (2020) and combines cloud features and tracks generated with the ICON weather model, the Comin interface, and the TOBAC framework (Tracking and Object-Based Analysis of Clouds).
+The data include temporally linked cloud objects with parent–child relationships representing splitting and merging events, as well as associated vertical profiles of physical variables such as cloud water, ice, rain rate, and other hydrometeorological quantities.
+The goal of this project is to use machine learning methods to investigate whether and how the vertical profiles can be used to infer subsequent rain formation or cloud intensity. Other research questions related to cloud development are also possible.
 
 ### Task Type
 
@@ -15,16 +17,19 @@
 ### Results Summary
 
 #### Best Model Performance
+
 - **Best Model:** [Name and type of the best-performing model"]
 - **Evaluation Metric:** [Primary metric used, e.g., Accuracy, F1-Score, MSE, MAE]
 - **Final Performance:** [Best score achieved, e.g., 95% accuracy, F1-score of 0.87, MSE of 0.12]
 
 #### Model Comparison
+
 - **Baseline Performance:** [Baseline model performance for comparison]
 - **Improvement Over Baseline:** [Quantitative improvement, e.g., "+12% accuracy", "25% reduction in MSE"]
 - **Best Alternative Model:** [Second-best model and its performance]
 
 #### Key Insights
+
 - **Most Important Features:** [Top 3-5 features that drive model performance]
 - **Model Strengths:** [What the model does well]
 - **Model Limitations:** [Known limitations and failure cases]
