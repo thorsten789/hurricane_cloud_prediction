@@ -34,7 +34,7 @@
 
 ## Exploratory Data Analysis
 
-The exploratory data analysis is conducted in the [exploratory_data_analysis.ipynb](exploratory_data_analysis.ipynb) notebook, which includes:
+The exploratory data analysis is conducted in the [Exploratory Data Analysis](exploratory_data_analysis.ipynb) notebook, which includes:
 
 - Data loading and initial inspection
 - Statistical summaries and distributions
