@@ -9,8 +9,11 @@
   *This dataset is part of ongoing, unpublished research. It is therefore not publicly accessible.*  
   Access may be granted upon request.
 
+  A Data Sample is included in this Repo. 
+
 - **Dataset Owner/Contact:**  
   Dr. Matthias Faust
+
   Leibniz Institute for Tropospheric Research (TROPOS)  
   *Modelling Department*  
   Contact: [faust@tropos.de]
