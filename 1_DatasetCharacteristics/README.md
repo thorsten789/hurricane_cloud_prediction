@@ -2,35 +2,83 @@
 
 **[Notebook](exploratory_data_analysis.ipynb)**
 
-## Dataset Information
+# Dataset Information
 
-### Dataset Source
+## Dataset Source
+- **Dataset Link:**  
+  *This dataset is part of ongoing, unpublished research. It is therefore not publicly accessible.*  
+  Access may be granted upon request.
 
-- **Dataset Link:** [Provide a direct link to your dataset. If the dataset is private, explain the reason and provide contact information for the dataset owner]
-- **Dataset Owner/Contact:** [If applicable, provide contact information for private datasets]
+- **Dataset Owner/Contact:**  
+  Matthias Faust
+  Leibniz Institute for Tropospheric Research (TROPOS)  
+  *Modelling Department*  
+  Contact: [faust@tropos.de]
 
-### Dataset Characteristics in the narrow sense
+## Dataset Characteristics
 
-- **Number of Observations:** [Total number of samples/records in your dataset. For time series data, also specify the temporal resolution (e.g., daily, hourly, etc.)]
-- **Number of Features:** [Total number of features in your dataset]
+### Scope and Structure
+The dataset contains **4,500 individual cloud tracks (cloud cells)** extracted from a high-resolution ICON simulation of Hurricane Paulette (7–8 September 2020).  
+Each cloud track is represented as a **time series** with a temporal resolution of **30 seconds**. Track lengths vary strongly due to natural differences in cloud lifetime.
 
-### Target Variable/Label
+Each time step contains:
+- metadata (time, frame, lat/lon, cell id)  
+- scalar physical variables (e.g., LWP, IWP, CAPE, CIN, rain rate, area)  
+- full vertical profiles of microphysical and dynamical variables on ~50 model levels (hydrometeors, water vapor, air density, vertical velocity)
 
-- **Label Name:** [Name of the target variable/column]
-- **Label Type:** [Classification/Regression/Clustering/Other]
-- **Label Description:** [What does this label represent? What is the prediction task?]
-- **Label Values:** [For classification: list of classes and their meanings. For regression: range of values. For other tasks: describe the label structure]
-- **Label Distribution:** [Brief description of class balance for classification or value distribution for regression]
+### Dataset Size
+- **Number of cloud cells:** 4,500  
+- **Temporal resolution:** 30 s  
+- **Features per time step:** several hundred (dominated by vertical profiles)  
+- **Track lengths:** from a few time steps up to several hours
 
-### Feature Description
+## Prediction Task (Target)
 
-[Provide a brief description of each feature or group of features in your dataset. If you have many features, group them logically and describe each group. Include information about data types, ranges, and what each feature represents.]
+### Goal
+Given an **incomplete cloud track up to time t**, the model predicts:
+1. **the remaining lifetime** of the cloud  
+2. **the future rain rate** over the next steps (rain-rate sequence)
 
-**Example format:**
+This corresponds to a **joint regression + sequence forecasting task**:
 
-- **Feature 1 (feature_name):** [Description of what this feature represents, data type, and any relevant details]
-- **Feature 2 (feature_name):** [Description of what this feature represents, data type, and any relevant details]
-- **Feature Group (group_name):** [Description of a group of related features]
+| Component | Type | Description |
+|----------|------|-------------|
+| **Remaining lifetime** | Regression | `lifetime_remaining_s = t_end − t_current` |
+| **Future rain-rate sequence** | Seq2Seq regression | Predict `rain(t+1 … t+k)` |
+
+The input is a multivariate, irregular-length cloud time series;  
+the output is a predicted continuation of the sequence.
+
+## Label Description
+
+### 1. Remaining Lifetime
+- **Label name:** `remaining_lifetime_s`  
+- **Type:** regression  
+- **Description:** Time until cloud dissipates, measured from the last input time step  
+- **Distribution:** Strongly right-skewed; most clouds die quickly
+
+### 2. Future Rain-Rate Sequence
+- **Label name:** `rain_rate_future[t+1 ... t+k]`  
+- **Type:** sequence regression  
+- **Description:** Predict the short-term evolution of grid-scale precipitation rate  
+- **Distribution:** Highly sparse and right-skewed (rain occurs only in a minority of time steps)
+
+## Feature Description
+
+### 1. Scalar Features
+- Latitude, longitude  
+- Area (m²)  
+- LWP, IWP, TQC, TQI  
+- CAPE, CIN  
+- Precipitation rate  
+
+### 2. Vertical Profile Features (~50 levels each)
+- Hydrometeor mixing ratios: qc, qi, qs, qg, qr  
+- Water vapor (qv)  
+- Air density (roh)  
+- Vertical velocity (w)
+
+These profile features describe the full vertical structure of clouds and convection, essential for forecasting cloud development and precipitation.
 
 ## Exploratory Data Analysis
 
