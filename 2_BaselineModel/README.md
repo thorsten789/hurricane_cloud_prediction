@@ -6,23 +6,21 @@
 
 ### Model Selection
 
-- **Baseline Model Type:** [e.g., Random Forest, Logistic Regression, Linear Regression, Naive Bayes, etc.]
-- **Rationale:** [Brief explanation of why this model was chosen as baseline]
+- **Baseline Model Type:** Reduce the input sequence to single values (mean, min/max, gradients) and feed to Random Forest.
+- **Rationale:** A Baseline Model should start with something simple. A Random Forest doesn't take long to train, yet already carries a lot of information.
 
 ### Model Performance
 
-- **Evaluation Metric:** [e.g., Accuracy, F1-Score, Precision, Recall, MSE, MAE, R², etc.]
-- **Performance Score:** [e.g., 85% accuracy, F1-score of 0.78, MSE of 0.15]
-- **Cross-Validation Score:** [Mean and standard deviation of CV scores, e.g., 0.82 ± 0.03]
+- **Evaluation Metric:** MAE 46.86 seconds | RMSE 139.39 seconds
 
 ### Evaluation Methodology
 
-- **Data Split:** [Train/Validation/Test split ratios, e.g., 70/15/15]
-- **Evaluation Metrics:** [List all metrics used and justify why they are appropriate for this problem]
+- **Data Split:** Train/Validation/Test split ratios: 70/15/15
+- **Evaluation Metrics:** MAE and RMSE both produce human-understandable results. A fundamental problem in our Dataset Characteristics is the imbalance resulting from the prevalence of cloud cells with a very short lifetime. Because it punishes large errors stronger, we suppose RMSE to suit better to the task.
 
 ### Metric Practical Relevance
 
-[Explain the practical relevance and business impact of each chosen evaluation metric. How do these metrics translate to real-world performance and decision-making? What do the metric values mean in the context of your specific problem domain?]
+We feed the model with data in timesteps of 30 seconds. Thus the results of both the Mean Absolute Error and Root Mean Square Error metrics lie within the scope of few timesteps, which is very good.
 
 ## Next Steps
 
