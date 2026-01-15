@@ -1,44 +1,42 @@
 import json
 from datetime import datetime
 
-def save_json_with_timestamp(model_name, param1, param2, param3):
+def save_json_with_timestamp(model_name, params_dict):
     """
-    Speichert eine JSON-Datei mit Zeitstempel im Dateinamen.
+    Saves a JSON file with a timestamp in the filename.
     
     Args:
-        model_name: Name des Modells
-        param1: Erster Parameter
-        param2: Zweiter Parameter
-        param3: Dritter Parameter
+        model_name: Name of the model
+        params_dict: Dictionary containing hyperparameters and performance statistics
     
     Returns:
-        str: Pfad zur gespeicherten Datei
+        str: Path to the saved file
     """
-    # Aktuelles Datum und Uhrzeit im Format: YYYY-MM-DD_HH-MM-SS
+    # Current date and time in format: YYYY-MM-DD_HH-MM-SS
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     
-    # Dateiname zusammensetzen
+    # Compose filename
     filename = f"{model_name}_{timestamp}.json"
     
-    # Daten als Dictionary vorbereiten
-    data = {
-        "Param1": param1,
-        "Param2": param2,
-        "Param3": param3
-    }
+    # Use the provided dictionary directly
+    data = params_dict
     
-    # JSON-Datei speichern
+    # Save JSON file
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
     
-    print(f"Datei gespeichert: {filename}")
+    print(f"Hyperparameters and statistics saved: {filename}")
     return filename
 
-# Beispielaufruf
+# Example usage
 if __name__ == "__main__":
+    params = {
+        "Param1": "Value1",
+        "Param2": 42,
+        "Param3": [1, 2, 3]
+    }
+    
     save_json_with_timestamp(
-        model_name="MeinModell",
-        param1="Wert1",
-        param2=42,
-        param3=[1, 2, 3]
+        model_name="MyModel",
+        params_dict=params
     )
