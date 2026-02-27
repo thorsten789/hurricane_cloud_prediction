@@ -716,6 +716,235 @@ Additionally, Phase 3 includes a **minimal robustness check** using two seeds.
 ---
 
 
+# Phase 3 — Integration Results
+
+## Objective
+
+Phase 3 combines the strongest configurations identified in Phase 2 to evaluate whether the individually optimal settings remain effective when applied together.  
+The goal is to select a **single robust final model configuration**.
+
+All experiments are evaluated relative to the persistence baseline using RMSE-based skill scores.
+
+---
+
+## Phase 3 Experimental Setup
+
+### Fixed Components
+
+| Component | Setting |
+|---|---|
+| Feature Set | F1 — Ratios + Motion |
+| Architecture | GRU |
+| Loss | MSE |
+| Layers | 1 |
+| Forecast Horizon | 20 min |
+| Stride | 10 min |
+| Datashare | 0.5 |
+| Epochs | 20 |
+
+### Tested Dimensions
+
+| Dimension | Values |
+|---|---|
+| RNN Units | 128, 256 |
+| Input Window | 20 min, 30 min |
+| Random Seeds | 2 seeds per configuration |
+
+Total runs:
+
+```
+2 (units) × 2 (input windows) × 2 (seeds) = 8 experiments
+```
+
+---
+
+## Results Overview
+
+### Best Individual Runs (Rain Skill)
+
+| Rank | Configuration | Rain Skill | Cloud Base Skill |
+|---|---|---|---|
+| 1 | units=256, input=20 | **0.175** | 0.163 |
+| 2 | units=128, input=30 | 0.173 | 0.162 |
+| 3 | units=128, input=20 | 0.170 | **0.175** |
+| 4 | units=256, input=30 | 0.167 | 0.173 |
+
+All configurations significantly outperform earlier phase baselines.
+
+---
+
+### Mean Performance per Configuration (Seeds Averaged)
+
+| Configuration | Rain Skill | Cloud Base Skill |
+|---|---|---|
+| **128 units + 20 min input** | **0.169** | **0.135** |
+| 256 units + 30 min input | 0.165 | 0.136 |
+| 256 units + 20 min input | 0.163 | 0.125 |
+| 128 units + 30 min input | 0.161 | 0.129 |
+
+---
+
+## Key Findings
+
+### 1. Temporal Configuration Remains Dominant
+
+The optimal forecast setup identified in Phase 2 remains stable:
+
+- Forecast horizon ≈ 20 minutes
+- Input history ≈ 20–30 minutes
+
+This confirms that predictive skill is primarily governed by the **intrinsic temporal dynamics** of cloud evolution.
+
+---
+
+### 2. Model Capacity Saturation
+
+Increasing model width beyond 128 units provides only marginal improvement.
+
+Implication:
+- The problem is **not capacity limited**.
+- Larger models increase computational cost without meaningful skill gain.
+
+---
+
+### 3. Robustness Across Random Seeds
+
+All configurations maintain positive skill across seeds:
+
+```
+Rain skill ≈ 0.15–0.17
+```
+
+This indicates stable training behaviour and confirms that performance gains are not caused by initialization randomness.
+
+---
+
+## Scientific Interpretation
+
+Phase 3 validates the central hypothesis emerging from earlier phases:
+
+> Forecast skill is primarily controlled by temporal alignment rather than network complexity or optimization details.
+
+The experiments empirically identify an effective predictability time scale of approximately **20 minutes** for the analyzed cloud systems.
+
+---
+
+## Final Selected Model Configuration
+
+The following configuration is selected as the **Final Model**:
+
+| Component | Final Choice |
+|---|---|
+| Architecture | GRU |
+| Layers | **1** |
+| Units | **128** |
+| Input Window | **20 min** |
+| Forecast Horizon | **20 min** |
+| Stride | 10 min |
+| Learning Rate | 0.002 |
+| Dropout | 0.1 |
+| Batch Size | 32 |
+| Features | Ratios + Motion (F1) |
+
+### Rationale
+
+This configuration provides:
+
+- near‑maximum predictive skill,
+- strong robustness,
+- minimal model complexity,
+- efficient computational cost.
+
+---
+
+## Outcome of Phase 3
+
+Phase 3 concludes the model selection process.
+
+A single stable configuration has been identified that:
+
+- consistently outperforms persistence,
+- generalizes across seeds,
+- balances performance and efficiency.
+
+This model will serve as the reference configuration for all subsequent analyses and extended evaluations.
+
+
+
+# Final Model — Full Dataset Training Results
+
+## Objective
+
+After completing Phases 1–3 of model design and validation, the selected final configuration was trained on the **full available dataset** (`datashare = 1.0`).
+
+This run represents the **production reference model** used for all subsequent analysis and evaluation.
+
+All performance metrics are reported relative to the persistence baseline using RMSE-based skill scores.
+
+---
+
+## Final Model Configuration
+
+| Component | Setting |
+|---|---|
+| Architecture | GRU |
+| Layers | 1 |
+| Units | 128 |
+| Feature Set | Ratios + Motion (F1) |
+| Input Window | 20 min |
+| Forecast Horizon | 20 min |
+| Stride | 10 min |
+| Loss | MSE |
+| Learning Rate | 0.002 |
+| Dropout | 0.1 |
+| Batch Size | 32 |
+| Epochs | 40 |
+| Datashare | 1.0 (full dataset) |
+| Seed | 42 |
+
+---
+
+## Performance Summary (Full Dataset)
+
+Skill is defined relative to persistence:
+
+```
+Skill = 1 − RMSE_model / RMSE_persistence
+```
+
+| Target | Skill (RMSE-based) |
+|---|---|
+| Rain rate | **0.218** |
+| Cloud base | **0.161** |
+| Total cloud water (TQC) | **0.144** |
+| Total cloud ice (TQI) | **0.082** |
+| **Mean Skill** | **0.151** |
+
+---
+
+## Interpretation
+
+Training on the full dataset leads to a clear improvement compared to Phase 3 experiments performed on reduced data shares.
+
+Key observations:
+
+- Predictive skill increases consistently across all targets.
+- Rain prediction shows the strongest improvement, confirming that additional samples improve dynamical learning.
+- Microphysical quantities (TQC, TQI) remain harder to predict but retain positive skill.
+- No instability or performance degradation is observed when scaling to the full dataset.
+
+---
+
+## Scientific Conclusion
+
+The final results confirm the central finding of this project:
+
+> Forecast skill is primarily governed by temporal alignment of the learning problem rather than increased model complexity.
+
+A shallow GRU model with moderate capacity is sufficient once the correct temporal representation is chosen.
+
+
+
 
 
 
