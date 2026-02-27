@@ -655,5 +655,68 @@ Only this reduced candidate space will be explored to evaluate parameter interac
 ---
 
 
+# Phase 3 — Integration of Phase 2 Winners
+
+## Objective
+
+Phase 3 combines the strongest configurations identified in Phase 2 to test **interaction effects** and to select a final candidate configuration for extended evaluation.
+
+Phase 2 showed that:
+
+- Temporal representation dominates skill (best results at 20 min horizon with 20–30 min input).
+- Capacity has a secondary effect (wider, shallow networks outperform deeper ones).
+- Optimization settings have a comparatively small but measurable effect; a stable “best” setting was identified.
+
+Phase 3 therefore focuses on a **small integration grid** rather than a full factorial sweep.
+
+---
+
+## Phase 3 Design
+
+All Phase 3 runs are evaluated using the same persistence-relative skill metrics established in Phase 1.
+
+### Fixed Components
+
+| Component | Setting |
+|---|---|
+| Feature Set | F1 (Ratios + Motion) |
+| Architecture | GRU |
+| Loss | MSE |
+| Hydrometeor stats | Disabled |
+| Forecast horizon | 20 min |
+| Stride | 10 min (overlapping outputs) |
+| Datashare | 0.5 |
+| Epochs | 20 |
+
+### Combined Candidate Space
+
+Phase 3 crosses:
+
+1. **Capacity (from Sweep A)**  
+   - RNN units: 128, 256  
+   - Layers: 1 (selected based on Phase 2 capacity results)
+
+2. **Temporal setup (from Sweep B)**  
+   - Input window: 20, 30 minutes  
+   - Horizon fixed at 20 minutes (best-performing horizon in Phase 2)
+
+3. **Optimization (from Sweep C)**  
+   - learning rate: 0.002  
+   - dropout: 0.1  
+   - batch size: 32  
+
+Additionally, Phase 3 includes a **minimal robustness check** using two seeds.
+
+### Total Runs
+
+```
+2 (units) × 2 (input windows) × 2 (seeds) = 8 runs
+```
+
+---
+
+
+
+
 
 
