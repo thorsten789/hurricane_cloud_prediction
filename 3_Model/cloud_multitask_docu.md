@@ -583,3 +583,77 @@ Total experiments:
 All experiments are executed as independent SLURM array jobs using identical evaluation procedures.
 
 
+
+# Phase 2 Results Summary
+
+## Overview
+
+Phase 2 explored three independent parameter dimensions around the validated Phase‑2 Reference Model:
+
+- Capacity scaling
+- Temporal representation
+- Optimization dynamics
+
+A total of **67 experiments** were executed and evaluated relative to the persistence baseline.
+
+---
+
+## Key Findings
+
+### 1. Temporal Representation Dominates Performance
+
+The largest performance improvements were achieved by modifying temporal configuration.
+
+Best observed rain skill:
+**≈ 0.17**, significantly exceeding gains from capacity or optimization tuning.
+
+This indicates that forecast skill is primarily governed by the **predictability time scale** of the cloud system rather than network complexity.
+
+---
+
+### 2. Capacity Has Secondary Impact
+
+Increasing model width improves performance slightly, while deeper models provide no benefit.
+
+Best configuration:
+- GRU
+- 1 layer
+- 128–256 units
+
+This suggests the problem requires moderate representational capacity but not deep temporal abstraction.
+
+---
+
+### 3. Optimization Is Not the Limiting Factor
+
+Learning rate, dropout, and batch size changes produced comparatively small skill variations.
+
+Training stability is therefore sufficient in the baseline configuration.
+
+---
+
+## Scientific Interpretation
+
+Phase 2 reveals that cloud evolution predictability is primarily controlled by temporal dynamics:
+
+- Short historical windows (20–30 min) are sufficient.
+- Forecast horizons around 20 minutes maximize predictive signal.
+- Microphysical quantities become partially predictable only when temporal alignment is appropriate.
+
+---
+
+## Phase 3 Direction
+
+Phase 3 will combine the strongest configurations identified here:
+
+- Capacity: 128–256 GRU units, 1 layer
+- Temporal setup: 20–30 min input, 20 min horizon
+- Optimization: lr≈0.002, dropout≈0.1–0.2, batch size≈32
+
+Only this reduced candidate space will be explored to evaluate parameter interactions.
+
+---
+
+
+
+
