@@ -2,7 +2,7 @@
 
 ## Repository Link
 
-[https://github.com/thorsten789/hurricane_cloud_prediction]
+<https://github.com/thorsten789/hurricane_cloud_prediction>
 
 ## Description
 
@@ -76,8 +76,8 @@ An effective predictability timescale of roughly **20 minutes** emerged from the
 ## Documentation
 
 1. **[Literature Review](0_LiteratureReview/README.md)**
-2. **[Dataset Characteristics](1_DatasetCharacteristics/exploratory_data_analysis.ipynb)**
-3. **[Baseline Model](2_BaselineModel/baseline_model.ipynb)**
+2. **[Dataset Characteristics](1_DatasetCharacteristics/README.md)**
+3. **[Baseline Model](2_BaselineModel/README.md)**
 4. **[Model Definition and Evaluation](3_Model/README.md)**
 5. **[Presentation](4_Presentation/README.md)**
 
