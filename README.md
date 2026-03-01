@@ -71,7 +71,7 @@ where persistence assumes the future state equals the current observation.
 
 An effective predictability timescale of roughly **20 minutes** emerged from the experiments.
 
-
+**To become practically applicable, the model would need to capture variability beyond mean tendencies. Achieving reliable prediction of fine-scale dynamics remains an important direction for future work.**
 
 ## Documentation
 
